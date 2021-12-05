@@ -141,11 +141,41 @@ bool TicTacToe::game_is_won(std::vector<std::pair<int, int>> occupied_positions)
 }
 
 char TicTacToe::get_opponent_marker(char marker){
+    char opponent_marker;
+    if (marker == PLAYER_MARKER) {
+        opponent_marker = AI_MARKER;
+    } else {
+        opponent_marker = PLAYER_MARKER;
+    }
 
+    return opponent_marker;
 }
 
 int TicTacToe::get_board_state(char board[3][3], char marker){
+    char opponent_marker = get_opponent_marker(marker);
 
+    std::vector<std::pair<int, int>> occupied_positions =
+        get_occupied_positions(board, marker);
+
+    bool is_won = game_is_won(occupied_positions);
+
+    if (is_won) {
+        return WIN;
+    }
+
+    occupied_positions = get_occupied_positions(board, opponent_marker);
+    bool is_lost = game_is_won(occupied_positions);
+
+    if (is_lost) {
+        return LOSS;
+    }
+
+    bool is_full = board_is_full(board);
+    if (is_full) {
+        return DRAW;
+    }
+
+    return DRAW;
 }
 
 std::pair<int, std::pair<int, int>> TicTacToe::minimax_optimization(char board[3][3], char marker, int depth,  int alpha, int beta){
