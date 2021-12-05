@@ -82,7 +82,16 @@ std::vector<std::pair<int, int>> TicTacToe::get_legal_moves(char board[3][3]) {
 }
 
 bool TicTacToe::position_occupied(char board[3][3], std::pair<int, int> pos) {
+    std::vector<std::pair<int, int>> legal_moves = get_legal_moves(board);
 
+    for (int i = 0; i < legal_moves.size(); i++) {
+        if (pos.first == legal_moves[i].first &&
+            pos.second == legal_moves[i].second) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 std::vector<std::pair<int, int>> TicTacToe::get_occupied_positions(char board[3][3], char marker) {
