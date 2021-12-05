@@ -2,6 +2,7 @@
 #define TICTACTOE_H
 
 #include <QMainWindow>
+#include <QPushButton>
 #include <algorithm>
 #include <array>
 #include <iostream>
@@ -24,6 +25,7 @@ private:
 
 private slots:
     void print_game_state(int state);
+    void print_board(char board[3][3]);
     std::vector<std::pair<int, int>> get_legal_moves(char board[3][3]);
     bool position_occupied(char board[3][3], std::pair<int, int> pos);
     std::vector<std::pair<int, int>> get_occupied_positions(char board[3][3], char marker);

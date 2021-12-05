@@ -44,7 +44,6 @@ TicTacToe::~TicTacToe()
     delete ui;
 }
 
-
 void TicTacToe::print_game_state(int state) {
     if (WIN == state) {
         ui->Display->setText("WIN");
@@ -55,8 +54,31 @@ void TicTacToe::print_game_state(int state) {
     }
 }
 
-std::vector<std::pair<int, int>> TicTacToe::get_legal_moves(char board[3][3]) {
+void TicTacToe::print_board(char board[3][3]) {
+    QPushButton *Buttons[3][3];
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            QString butName = "Button" + QString::number(i) + QString::number(j);
+            Buttons[i][j] = TicTacToe::findChild<QPushButton *>(butName);
+        }
+    }
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            Buttons[i][j]->setText(QChar(board[i][j]));
+        }
+    }
+}
 
+std::vector<std::pair<int, int>> TicTacToe::get_legal_moves(char board[3][3]) {
+    std::vector<std::pair<int, int>> legal_moves;
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (board[i][j] != AI_MARKER && board[i][j] != PLAYER_MARKER) {
+                legal_moves.push_back(std::make_pair(i, j));
+            }
+        }
+    }
+    return legal_moves;
 }
 
 bool TicTacToe::position_occupied(char board[3][3], std::pair<int, int> pos) {
