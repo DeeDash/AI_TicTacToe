@@ -38,6 +38,7 @@ private slots:
     std::pair<int, std::pair<int, int>> minimax_optimization(char board[3][3], char marker, int depth,  int alpha, int beta);
     bool game_is_done(char board[3][3]);
     void game();
+    void pressed();
     void test();
 };
 #endif // TICTACTOE_H

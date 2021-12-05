@@ -56,6 +56,7 @@ TicTacToe::~TicTacToe()
     delete ui;
 }
 
+
 void TicTacToe::print_game_state(int state) {
     if (WIN == state) {
         ui->Display->setText("Player Wins!");
@@ -225,9 +226,7 @@ std::pair<int, std::pair<int, int>> TicTacToe::minimax_optimization(char board[3
 
         // Maximizing player's turn
         if (marker == AI_MARKER) {
-            int score = minimax_optimization(board, PLAYER_MARKER, depth + 1,
-                                             alpha, beta)
-                            .first;
+            int score = minimax_optimization(board, PLAYER_MARKER, depth + 1, alpha, beta).first;
 
             // Get the best scoring move
             if (best_score < score) {
@@ -289,17 +288,23 @@ void TicTacToe::game(){
             Buttons[i][j] = TicTacToe::findChild<QPushButton *>(butName);
         }
     }
-    while (!game_is_done(board)) {
-        QPushButton *button = (QPushButton *)sender();
-        button->setText(QString(PLAYER_MARKER));
-        update_board();
+    //while (!game_is_done(board)) {
+        pressed();
         std::pair<int, std::pair<int, int>> ai_move = minimax_optimization(board, AI_MARKER, START_DEPTH, LOSS, WIN);
         board[ai_move.second.first][ai_move.second.second] = AI_MARKER;
         Buttons[ai_move.second.first][ai_move.second.second]->setText(QString(AI_MARKER));
-    }
+    //}
     int player_state = get_board_state(board, PLAYER_MARKER);
+    print_game_state(player_state);
 }
 
 void TicTacToe::test() {
 
+}
+
+void TicTacToe::pressed() {
+    QPushButton *button = (QPushButton *)sender();
+    button->setText(QString(PLAYER_MARKER));
+    button->setEnabled(false);
+    update_board();
 }
