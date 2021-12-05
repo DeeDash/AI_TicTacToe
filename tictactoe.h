@@ -26,7 +26,7 @@ private:
 
 private slots:
     void print_game_state(int state);
-    void print_board(char board[3][3]);
+    //void print_board(char board[3][3]);
     void update_board();
     std::vector<std::pair<int, int>> get_legal_moves(char board[3][3]);
     bool position_occupied(char board[3][3], std::pair<int, int> pos);

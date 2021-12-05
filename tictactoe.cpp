@@ -46,7 +46,7 @@ TicTacToe::TicTacToe(QWidget *parent)
         for (int j = 0; j < 3; ++j) {
             QString butName = "Button" + QString::number(i) + QString::number(j);
             Buttons[i][j] = TicTacToe::findChild<QPushButton *>(butName);
-            connect(Buttons[i][j], SIGNAL(released()), this, SLOT(test()));
+            connect(Buttons[i][j], SIGNAL(released()), this, SLOT(game()));
         }
     }
 }
@@ -66,19 +66,23 @@ void TicTacToe::print_game_state(int state) {
     }
 }
 
-void TicTacToe::print_board(char board[3][3]) {
+/*void TicTacToe::print_board(char board[3][3]) {
     QPushButton *Buttons[3][3];
     for (int i = 0; i < 3; ++i) {
         for (int j = 0; j < 3; ++j) {
             QString butName = "Button" + QString::number(i) + QString::number(j);
             Buttons[i][j] = TicTacToe::findChild<QPushButton *>(butName);
             Buttons[i][j]->setText(QString(board[i][j]));
-            /*if (QString::compare(Buttons[i][j]->text(), QString(" ")) == 1) {
+            if (QString::compare(Buttons[i][j]->text(), QString(" ")) == 1) {
                 Buttons[i][j]->setEnabled(false);
-            }*/
+            }
+            else {
+                Buttons[i][j]->setEnabled(true);
+                Buttons[i][j]->setText(QString(EMPTY_SPACE));
+            }
         }
     }
-}
+}*/
 
 void TicTacToe::update_board() {
     QPushButton *Buttons[3][3];
@@ -278,29 +282,24 @@ bool TicTacToe::game_is_done(char board[3][3]){
 }
 
 void TicTacToe::game(){
+    QPushButton *Buttons[3][3];
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            QString butName = "Button" + QString::number(i) + QString::number(j);
+            Buttons[i][j] = TicTacToe::findChild<QPushButton *>(butName);
+        }
+    }
     while (!game_is_done(board)) {
         QPushButton *button = (QPushButton *)sender();
         button->setText(QString(PLAYER_MARKER));
         update_board();
         std::pair<int, std::pair<int, int>> ai_move = minimax_optimization(board, AI_MARKER, START_DEPTH, LOSS, WIN);
         board[ai_move.second.first][ai_move.second.second] = AI_MARKER;
-        print_board(board);
-        ui->Display->setText(button->text());
+        Buttons[ai_move.second.first][ai_move.second.second]->setText(QString(AI_MARKER));
     }
     int player_state = get_board_state(board, PLAYER_MARKER);
 }
 
 void TicTacToe::test() {
-    board[1][1] = 'X';
-    board[2][2] = 'Y';
-    QPushButton *Buttons[3][3];
-    for (int i = 0; i < 3; ++i) {
-        for (int j = 0; j < 3; ++j) {
-            QString butName = "Button" + QString::number(i) + QString::number(j);
-            Buttons[i][j] = TicTacToe::findChild<QPushButton *>(butName);
-            std::string temp = Buttons[i][j]->text().toStdString();
-            ui->Display->setText(QString(temp[0]));
-        }
-    }
 
 }
