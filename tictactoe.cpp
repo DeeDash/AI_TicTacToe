@@ -95,15 +95,49 @@ bool TicTacToe::position_occupied(char board[3][3], std::pair<int, int> pos) {
 }
 
 std::vector<std::pair<int, int>> TicTacToe::get_occupied_positions(char board[3][3], char marker) {
+    std::vector<std::pair<int, int>> occupied_positions;
 
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (marker == board[i][j]) {
+                occupied_positions.push_back(std::make_pair(i, j));
+            }
+        }
+    }
+
+    return occupied_positions;
 }
 
 bool TicTacToe::board_is_full(char board[3][3]){
+    std::vector<std::pair<int, int>> legal_moves = get_legal_moves(board);
 
+    if (0 == legal_moves.size()) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 bool TicTacToe::game_is_won(std::vector<std::pair<int, int>> occupied_positions){
+    bool game_won;
 
+    for (int i = 0; i < winning_states.size(); i++) {
+        game_won = true;
+        std::vector<std::pair<int, int>> curr_win_state = winning_states[i];
+        for (int j = 0; j < 3; j++) {
+            if (!(std::find(std::begin(occupied_positions),
+                            std::end(occupied_positions), curr_win_state[j]) !=
+                  std::end(occupied_positions))) {
+                game_won = false;
+                break;
+            }
+        }
+
+        if (game_won) {
+            break;
+        }
+    }
+    return game_won;
 }
 
 char TicTacToe::get_opponent_marker(char marker){
