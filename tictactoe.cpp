@@ -289,13 +289,20 @@ void TicTacToe::game(){
         }
     }
     //while (!game_is_done(board)) {
-        pressed();
+    pressed();
+    int player_state = get_board_state(board, PLAYER_MARKER);
+    if (board_is_full(board)) {
+        print_game_state(player_state);
+    } else {
         std::pair<int, std::pair<int, int>> ai_move = minimax_optimization(board, AI_MARKER, START_DEPTH, LOSS, WIN);
         board[ai_move.second.first][ai_move.second.second] = AI_MARKER;
         Buttons[ai_move.second.first][ai_move.second.second]->setText(QString(AI_MARKER));
     //}
-    int player_state = get_board_state(board, PLAYER_MARKER);
-    print_game_state(player_state);
+        player_state = get_board_state(board, PLAYER_MARKER);
+        if (board_is_full(board) || player_state == WIN || player_state==LOSS) {
+            print_game_state((player_state));
+        }
+    }
 }
 
 void TicTacToe::test() {
