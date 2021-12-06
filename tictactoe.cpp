@@ -15,21 +15,18 @@ using std::endl;
 
 #define START_DEPTH 0
 
-int count = 0;
 char board[3][3] = { EMPTY_SPACE };
 
 std::vector<std::vector<std::pair<int, int>>> winning_states{
-    // Every row
+
     {std::make_pair(0, 0), std::make_pair(0, 1), std::make_pair(0, 2)},
     {std::make_pair(1, 0), std::make_pair(1, 1), std::make_pair(1, 2)},
     {std::make_pair(2, 0), std::make_pair(2, 1), std::make_pair(2, 2)},
 
-    // Every column
     {std::make_pair(0, 0), std::make_pair(1, 0), std::make_pair(2, 0)},
     {std::make_pair(0, 1), std::make_pair(1, 1), std::make_pair(2, 1)},
     {std::make_pair(0, 2), std::make_pair(1, 2), std::make_pair(2, 2)},
 
-    // Every diagonal
     {std::make_pair(0, 0), std::make_pair(1, 1), std::make_pair(2, 2)},
     {std::make_pair(2, 0), std::make_pair(1, 1), std::make_pair(0, 2)}
 
@@ -66,24 +63,6 @@ void TicTacToe::print_game_state(int state) {
         ui->Display->setText("Computer Wins!");
     }
 }
-
-/*void TicTacToe::print_board(char board[3][3]) {
-    QPushButton *Buttons[3][3];
-    for (int i = 0; i < 3; ++i) {
-        for (int j = 0; j < 3; ++j) {
-            QString butName = "Button" + QString::number(i) + QString::number(j);
-            Buttons[i][j] = TicTacToe::findChild<QPushButton *>(butName);
-            Buttons[i][j]->setText(QString(board[i][j]));
-            if (QString::compare(Buttons[i][j]->text(), QString(" ")) == 1) {
-                Buttons[i][j]->setEnabled(false);
-            }
-            else {
-                Buttons[i][j]->setEnabled(true);
-                Buttons[i][j]->setText(QString(EMPTY_SPACE));
-            }
-        }
-    }
-}*/
 
 void TicTacToe::update_board() {
     QPushButton *Buttons[3][3];
@@ -208,11 +187,10 @@ int TicTacToe::get_board_state(char board[3][3], char marker){
 }
 
 std::pair<int, std::pair<int, int>> TicTacToe::minimax_optimization(char board[3][3], char marker, int depth,  int alpha, int beta){
-    // Initialize best move
+
     std::pair<int, int> best_move = std::make_pair(-1, -1);
     int best_score = (marker == AI_MARKER) ? LOSS : WIN;
 
-    // If we hit a terminal state (leaf node), return the best score and move
     if (board_is_full(board) || DRAW != get_board_state(board, AI_MARKER)) {
         best_score = get_board_state(board, AI_MARKER);
         return std::make_pair(best_score, best_move);
@@ -280,6 +258,13 @@ bool TicTacToe::game_is_done(char board[3][3]){
     return false;
 }
 
+void TicTacToe::pressed() {
+    QPushButton *button = (QPushButton *)sender();
+    button->setText(QString(PLAYER_MARKER));
+    button->setEnabled(false);
+    update_board();
+}
+
 void TicTacToe::game(){
     QPushButton *Buttons[3][3];
     for (int i = 0; i < 3; ++i) {
@@ -288,7 +273,6 @@ void TicTacToe::game(){
             Buttons[i][j] = TicTacToe::findChild<QPushButton *>(butName);
         }
     }
-    //while (!game_is_done(board)) {
     pressed();
     int player_state = get_board_state(board, PLAYER_MARKER);
     if (board_is_full(board)) {
@@ -297,21 +281,9 @@ void TicTacToe::game(){
         std::pair<int, std::pair<int, int>> ai_move = minimax_optimization(board, AI_MARKER, START_DEPTH, LOSS, WIN);
         board[ai_move.second.first][ai_move.second.second] = AI_MARKER;
         Buttons[ai_move.second.first][ai_move.second.second]->setText(QString(AI_MARKER));
-    //}
         player_state = get_board_state(board, PLAYER_MARKER);
         if (board_is_full(board) || player_state == WIN || player_state==LOSS) {
             print_game_state((player_state));
         }
     }
-}
-
-void TicTacToe::test() {
-
-}
-
-void TicTacToe::pressed() {
-    QPushButton *button = (QPushButton *)sender();
-    button->setText(QString(PLAYER_MARKER));
-    button->setEnabled(false);
-    update_board();
 }

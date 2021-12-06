@@ -26,7 +26,6 @@ private:
 
 private slots:
     void print_game_state(int state);
-    //void print_board(char board[3][3]);
     void update_board();
     std::vector<std::pair<int, int>> get_legal_moves(char board[3][3]);
     bool position_occupied(char board[3][3], std::pair<int, int> pos);
@@ -37,8 +36,7 @@ private slots:
     int get_board_state(char board[3][3], char marker);
     std::pair<int, std::pair<int, int>> minimax_optimization(char board[3][3], char marker, int depth,  int alpha, int beta);
     bool game_is_done(char board[3][3]);
-    void game();
     void pressed();
-    void test();
+    void game();
 };
 #endif // TICTACTOE_H
